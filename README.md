@@ -1,12 +1,59 @@
+# Canonical name translation
 
-## Canonical name translation
+This repository contains the code to run the canonical name translation experiments associated with the [ParaNames paper](https://github.com/bltlab/paranames).
 
-The canonical name translation experiments are conducted using `fairseq`. All of the experiments can be found under `./experiments/canonical_name_translation/.`
+## How to run
+
+First, create parallel data using [`recipes/tag_ablation_create_data.sh`](docs/recipes_tag_ablation_create_data.md)
+
+```bash
+bash recipes/tag_ablation_create_data.sh \
+    ${path_to_tsv_dump_file} \
+    [optional arguments]
+```
+
+with `[optional arguments]` explained in the [documentation](docs/recipes_tag_ablation_create_data.md). Next, run 
+
+```
+bash recipes/tag_ablation_experiments.sh \
+    ${min_seed} ${max_seed} \
+    [optional arguments]
+```
+
+with `[optional arguments]` as explained in the [documentation](docs/recipes_tag_ablation_experiments.md).
+
+Finally, run evaluation with
+
+```
+bash recipes/tag_ablation_evaluate.sh \
+    ${start_seed} ${end_seed} \
+    ${split_to_eval_on_aka_eval_mode} ${jobs_per_gpu}
+```
+
+## Documentation
+
+### Full recipes
+The code bundled into `recipes/` for easy execution
+
+- Data creation
+	- Main script: [`recipes/tag_ablation_create_data.sh`](docs/recipes_tag_ablation_create_data.md)
+	- Reverse existing data: [`recipes/tag_ablation_create_reverse_data.sh`](docs/recipes_tag_ablation_create_reverse_data.md)
+- Main experiment script
+	- Creates experiment folder and trains model
+	- Script: [`recipes/tag_ablation_experiments.sh`](docs/recipes_tag_ablation_experiments.md)
+- Evaluation
+	- Script: [`recipes/tag_ablation_evaluate.sh`](docs/recipes_tag_ablation_evaluate.md)
+
+---
+
+# Further notes
+
+In the releases (TODO: link), all experiments can be found under `./experiments/canonical_name_translation/`:
 
 ```
 experiments/canonical_name_translation/
 ├── all2en
-│   ├── pn-tag-ablation-lang-script-seed1917   
+│   ├── pn-tag-ablation-lang-script-seed1917
 └── en2all
     ├── pn-rev-tag-ablation-lang-seed1917
 ```
