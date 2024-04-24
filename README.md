@@ -2,6 +2,20 @@
 
 This repository contains the code to run the canonical name translation experiments associated with the [ParaNames paper](https://github.com/bltlab/paranames).
 
+## Documentation
+
+### Full recipes
+The code bundled into `recipes/` for easy execution
+
+- Data creation
+	- Main script: [`recipes/tag_ablation_create_data.sh`](docs/recipes_tag_ablation_create_data.md)
+	- Reverse existing data: [`recipes/tag_ablation_create_reverse_data.sh`](docs/recipes_tag_ablation_create_reverse_data.md)
+- Main experiment script
+	- Creates experiment folder and trains model
+	- Script: [`recipes/tag_ablation_experiments.sh`](docs/recipes_tag_ablation_experiments.md)
+- Evaluation
+	- Script: [`recipes/tag_ablation_evaluate.sh`](docs/recipes_tag_ablation_evaluate.md)
+
 ## How to run
 
 First, create parallel data using [`recipes/tag_ablation_create_data.sh`](docs/recipes_tag_ablation_create_data.md)
@@ -30,19 +44,6 @@ bash recipes/tag_ablation_evaluate.sh \
     ${split_to_eval_on_aka_eval_mode} ${jobs_per_gpu}
 ```
 
-## Documentation
-
-### Full recipes
-The code bundled into `recipes/` for easy execution
-
-- Data creation
-	- Main script: [`recipes/tag_ablation_create_data.sh`](docs/recipes_tag_ablation_create_data.md)
-	- Reverse existing data: [`recipes/tag_ablation_create_reverse_data.sh`](docs/recipes_tag_ablation_create_reverse_data.md)
-- Main experiment script
-	- Creates experiment folder and trains model
-	- Script: [`recipes/tag_ablation_experiments.sh`](docs/recipes_tag_ablation_experiments.md)
-- Evaluation
-	- Script: [`recipes/tag_ablation_evaluate.sh`](docs/recipes_tag_ablation_evaluate.md)
 
 ---
 
