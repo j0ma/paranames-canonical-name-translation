@@ -160,7 +160,7 @@ The colums are:
 
 Below is a view of the TSV with `visidata`:
 
-![TSV of outputs](data/canonical_name_translation_outputs_101923.png)
+![TSV of outputs](img/canonical_name_translation_outputs_101923.png)
 
 ### Evaluation & results
 
