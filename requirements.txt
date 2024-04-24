@@ -1,0 +1,11 @@
+rich
+pandas
+numpy
+click
+fairseq
+tqdm
+attrs
+editdistance
+jiwer
+unicodeblock
+orjson

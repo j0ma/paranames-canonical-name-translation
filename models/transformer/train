@@ -1,0 +1,110 @@
+#!/bin/bash
+# Sweeps over data and hyperparameters.
+
+set -euo pipefail
+
+# Defaults.
+readonly SEED=$1
+readonly CRITERION=$2
+readonly LABEL_SMOOTHING=$3
+readonly OPTIMIZER=$4
+readonly LR=$5
+readonly LR_SCHEDULER=$6
+readonly WARMUP_INIT_LR=$7
+readonly WARMUP_UPDATES=$8
+
+WARMUP_UPDATES_FLAG="--warmup-updates=${WARMUP_UPDATES}"
+
+#echo "warmup updates flag: ${WARMUP_UPDATES_FLAG}"
+if [[ "${LR_SCHEDULER}" == "inverse_sqrt" ]]; then
+    WARMUP_INIT_LR_FLAG="--warmup-init-lr=${WARMUP_INIT_LR}"
+else
+    WARMUP_INIT_LR_FLAG=""
+fi
+
+echo "warmup init LR flag: ${WARMUP_INIT_LR_FLAG}"
+
+readonly CLIP_NORM=$9
+readonly MAX_UPDATE=${10}
+readonly SAVE_INTERVAL=${11}
+readonly ENCODER_LAYERS=${12}
+readonly ENCODER_ATTENTION_HEADS=${13}
+readonly DECODER_LAYERS=${14}
+readonly DECODER_ATTENTION_HEADS=${15}
+readonly ACTIVATION_FN=${16}
+
+# Hyperparameters to be tuned.
+readonly BATCH_SIZE=${17}
+readonly P_DROPOUT=${18}
+
+# Encoder / decoder sizes
+readonly DED=${19}
+readonly DHS=${20}
+readonly EED=${21}
+readonly EHS=${22}
+
+# Path to binarized data & checkpoints
+readonly EXPERIMENT_NAME=${23}
+readonly EXPERIMENT_FOLDER="$(pwd)/experiments/${EXPERIMENT_NAME}"
+readonly DATA_BIN_PATH="${EXPERIMENT_FOLDER}/binarized_data"
+readonly CHECKPOINT_FOLDER="${EXPERIMENT_FOLDER}/checkpoints"
+
+# Validate interval (note: these are new in fairseq 0.10.0)
+readonly VALIDATE_INTERVAL=${24}
+readonly VALIDATE_INTERVAL_UPDATES=${25}
+
+# Patience
+readonly PATIENCE=${26}
+
+train() {
+    local -r CP="$1"
+    shift
+
+    fairseq-train \
+        "${DATA_BIN_PATH}" \
+        --save-dir="${CP}" \
+        --source-lang="src" \
+        --target-lang="tgt" \
+        --log-format="json" \
+        --seed="${SEED}" \
+        --patience=${PATIENCE} \
+        --arch=transformer \
+        --attention-dropout="${P_DROPOUT}" \
+        --activation-dropout="${P_DROPOUT}" \
+        --activation-fn="${ACTIVATION_FN}" \
+        --encoder-embed-dim="${EED}" \
+        --encoder-ffn-embed-dim="${EHS}" \
+        --encoder-layers="${ENCODER_LAYERS}" \
+        --encoder-attention-heads="${ENCODER_ATTENTION_HEADS}" \
+        --encoder-normalize-before \
+        --decoder-embed-dim="${DED}" \
+        --decoder-ffn-embed-dim="${DHS}" \
+        --decoder-layers="${DECODER_LAYERS}" \
+        --decoder-attention-heads="${DECODER_ATTENTION_HEADS}" \
+        --decoder-normalize-before \
+        --share-decoder-input-output-embed \
+        --criterion="${CRITERION}" \
+        --label-smoothing="${LABEL_SMOOTHING}" \
+        --optimizer="${OPTIMIZER}" \
+        --lr="${LR}" \
+        --lr-scheduler="${LR_SCHEDULER}" \
+        --clip-norm="${CLIP_NORM}" \
+        --batch-size="${BATCH_SIZE}" \
+        --max-update="${MAX_UPDATE}" \
+        --save-interval="${SAVE_INTERVAL}" \
+        --validate-interval-updates="${VALIDATE_INTERVAL_UPDATES}" \
+        --fp16 --adam-betas '(0.9, 0.98)' --update-freq=16 \
+        --no-epoch-checkpoints \
+        --max-source-positions=2500 --max-target-positions=2500 \
+        --skip-invalid-size-inputs-valid-test \
+        ${WARMUP_UPDATES_FLAG} ${WARMUP_INIT_LR_FLAG}
+
+}
+
+echo "Encoder embedding dim: ${EED}"
+echo "Encoder hidden size: ${EHS}"
+echo "Decoder embedding dim: ${DED}"
+echo "Decoder hidden size: ${DHS}"
+
+echo "${CHECKPOINT_FOLDER}" | tee --append "${EXPERIMENT_FOLDER}/train_log.log"
+train "${CHECKPOINT_FOLDER}" | tee --append "${EXPERIMENT_FOLDER}/train_log.log"

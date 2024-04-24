@@ -1,0 +1,159 @@
+- config: basic-flags
+  flags:
+    experiment_name:
+      type: string
+      required: true
+    seed:
+      type: int
+      default: 1917
+- config: transformer-flags
+  flags:
+    criterion:
+      type: string
+      default: "label_smoothed_cross_entropy"
+    patience:
+      type: int
+      default: 3
+    label_smoothing:
+      type: float
+      default: 0.1
+    lr:
+      type: float
+      default: 0.0003
+    lr_scheduler:
+      type: string
+      default: "inverse_sqrt"
+    warmup_init_lr:
+      type: float
+      default: 0.001
+    clip_norm:
+      type: float
+      default: 1.0
+    save_interval:
+      type: int
+      default: 5
+    activation_fn:
+      type: string
+      default: "relu"
+    encoder_layers:
+      type: int
+      default: 4
+    decoder_layers:
+      type: int
+      default: 4
+    encoder_attention_heads:
+      type: int
+      default: 8
+    decoder_attention_heads:
+      type: int
+      default: 8
+    decoder_embedding_dim:
+      type: int
+      default: 200
+    decoder_hidden_size:
+      type: int
+      default: 1024
+    encoder_embedding_dim:
+      type: int
+      default: 200
+    encoder_hidden_size:
+      type: int
+      default: 1024
+    batch_size:
+      type: int
+      default: 64
+    optimizer:
+      type: string
+      default: "adam"
+    p_dropout:
+      type: float
+      default: 0.2
+    max_update:
+      type: int
+      default: 90000
+    validate_interval:
+      type: int
+      default: 1
+    validate_interval_updates:
+      type: int
+      default: 5000
+    warmup_updates:
+      type: int
+      default: 1000
+
+- operations:
+    prep_experiment:
+      description: "Prepares an experiment folder"
+      exec: "bash scripts/prep_experiment.sh ${experiment_name} ${normalization_type} ${corpus_name}"
+      flags:
+        $include: basic-flags
+        normalization_type:
+          type: string
+          required: true
+        corpus_name:
+          type: string
+          required: true
+      requires:
+        - file: data
+        - file: data-bin
+        - file: checkpoints
+        - file: experiments
+        - file: models
+        - file: scripts
+        - file: recipes
+      sourcecode: no
+                
+    train_transformer:
+      description: "Train transformer model"
+      exec: "bash models/transformer/train ${seed} ${criterion} ${label_smoothing} ${optimizer} ${lr} ${lr_scheduler} ${warmup_init_lr} ${warmup_updates} ${clip_norm} ${max_update} ${save_interval} ${encoder_layers} ${encoder_attention_heads} ${decoder_layers} ${decoder_attention_heads} ${activation_fn} ${batch_size} ${p_dropout} ${decoder_embedding_dim} ${decoder_hidden_size} ${encoder_embedding_dim} ${encoder_hidden_size} ${experiment_name} ${validate_interval} ${validate_interval_updates} ${patience}"
+      flags:
+        $include:
+          - basic-flags
+          - transformer-flags
+      requires:
+        - file: data
+        - file: data-bin
+        - file: checkpoints
+        - file: experiments
+        - file: models
+        - file: scripts
+        - file: recipes
+      sourcecode: no
+    evaluate_transformer:
+      description: "Evaluate transformer model"
+      exec: "bash models/transformer/evaluate ${experiment_name} ${mode} ${beam_size} ${seed} ${eval_name} ${langs_file} ${use_cpu}"
+      flags:
+        $include:
+          - basic-flags
+        mode:
+          type: string
+          default: "dev"
+        beam_size:
+          type: int
+          default: 5
+        eval_name:
+          default: "transformer"
+        langs_file:
+          default: ""
+        use_cpu:
+          type: string
+          default: "no"
+      output-scalars:
+          - word_acc: 'Word Accuracy\t(\value)'
+          - mean_f1: 'Mean F1\t(\value)'
+          - cer: 'CER\t(\value)'
+          - wer: 'WER\t(\value)'
+      requires:
+        - file: data
+        - file: data-bin
+        - file: checkpoints
+        - file: experiments
+        - file: models
+        - file: scripts
+        - file: recipes
+      sourcecode: no
+      compare:
+        - cer
+        - wer
+        - mean_f1
+        - word_acc

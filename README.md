@@ -17,8 +17,8 @@ The code is bundled into `recipes/` for easy execution
 	- Script: [`recipes/tag_ablation_evaluate.sh`](docs/recipes_tag_ablation_evaluate.md)
 
 ### Relevant individual scripts
-- Transformer model training script (TODO: link)
-- Transformer model evaluation script (TODO: link)
+- Transformer model [training](https://github.com/j0ma/paranames-canonical-name-translation/blob/add-code/models/transformer/train) script
+- Transformer model [evaluation](https://github.com/j0ma/paranames-canonical-name-translation/blob/add-code/models/transformer/evaluate) script
 
 ## How to run
 
