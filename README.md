@@ -16,6 +16,10 @@ The code is bundled into `recipes/` for easy execution
 - Evaluation
 	- Script: [`recipes/tag_ablation_evaluate.sh`](docs/recipes_tag_ablation_evaluate.md)
 
+### Relevant individual scripts
+- Transformer model training script (TODO: link)
+- Transformer model evaluation script (TODO: link)
+
 ## How to run
 
 First, create parallel data using [`recipes/tag_ablation_create_data.sh`](docs/recipes_tag_ablation_create_data.md)
