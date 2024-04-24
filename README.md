@@ -5,7 +5,7 @@ This repository contains the code to run the canonical name translation experime
 ## Documentation
 
 ### Full recipes
-The code bundled into `recipes/` for easy execution
+The code is bundled into `recipes/` for easy execution
 
 - Data creation
 	- Main script: [`recipes/tag_ablation_create_data.sh`](docs/recipes_tag_ablation_create_data.md)
