@@ -45,7 +45,7 @@ first_half=$(get_newline_separated_values "# Enter first half of experiments (re
 second_half=$(get_newline_separated_values "# Enter second half to send to GPU 1 (remove -seed[0-9]+)")
 ```
 
-TODO: give an example of these
+An example value being passed to `first_half` or `second_half` could, for example, be  `pn-17lang-all2en-lang-script`.
 
 Start the necessary `guild` queues:
 
