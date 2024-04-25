@@ -9,3 +9,4 @@ editdistance
 jiwer
 unicodeblock
 orjson
+guildai # TODO: remove this dependency in a future release
