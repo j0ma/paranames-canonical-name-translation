@@ -1,4 +1,4 @@
-# Canonical name translation
+# ParaNames - Canonical name translation
 
 This repository contains the code to run the canonical name translation experiments associated with the [ParaNames paper](https://github.com/bltlab/paranames).
 
