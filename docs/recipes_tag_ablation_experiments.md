@@ -53,6 +53,21 @@ en2all_exps=$(get_newline_separated_values "# Enter EN - X experiments")
 all2en_exps=$(get_newline_separated_values "# Enter X - EN experiments")
 ```
 
+When `get_newline_separated_values` runs, a `vim` buffer will open into which you should paste the dataset names that you wish to run.
+A handy way to do this is to run a bash command in the vim buffer as a filter, e.g.
+
+```
+# type this in the vim/vipe buffer
+## this grabs everything in the EN-X direction
+ls ./data/ | rg rev 
+
+## alternatively use this to grab everything in the X-EN direction
+ls ./data/ | rg -v rev 
+
+# then navigate the cursor on top of the line, press !! and type "bash" followed by Enter.
+# this should replace the above command with a list of files from ./data/ matching what you want to run. :)
+```
+
 Assuming there are 2 GPUs and we wish to run 3 jobs per GPU, start 6 queues using `guild`:
 
 ```bash
