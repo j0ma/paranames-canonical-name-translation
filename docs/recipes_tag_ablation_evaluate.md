@@ -87,5 +87,3 @@ do
 
 done
 ```
-
-(TODO: These appear to run in series though, so there might be some efficiency fixes we can do to parallelize better.)
