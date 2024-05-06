@@ -53,7 +53,7 @@ bash recipes/tag_ablation_evaluate.sh \
 
 # Further notes
 
-In the releases (TODO: link), all experiments can be found under `./experiments/canonical_name_translation/`:
+In the [release](https://github.com/j0ma/paranames-canonical-name-translation/releases/tag/lrec-coling-2024), all experiments can be found under `./experiments/canonical_name_translation/`:
 
 ```
 experiments/canonical_name_translation/
